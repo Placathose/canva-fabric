@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background-neutral-subtle: oklch(55.1% 0.027 264.364);
+  --background-neutral-subtle: #E2E2E2;
   --border-neutral-subtle: oklch(0.922 0 0);
   --foreground-neutral-subtle: oklch(0.145 0 0);
   --card-neutral-subtle: oklch(1 0 0);
@@ -68,19 +68,22 @@ body {
 .settings {
   position: fixed;
   top: 50%;
-  right: 16px;
+  right: 12px;
   transform: translateY(-50%);
   gap: 8px;
   display: flex;
   flex-direction: column;
-  background-color: var(--background-neutral-subtle);
-  padding: 24px 8px;
-  border-radius: 4px;
+  background-color: var(--card);
+  padding: 20px 16px;
+  border-radius: 8px;
   text-align: left;
+  min-width: 200px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px oklch(0 0 0 / 0.08);
 }
 
 .settings:empty {
-  padding: 0;
+  padding: 20px 16px;
 }
 
 

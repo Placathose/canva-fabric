@@ -19,7 +19,7 @@ function Settings({ canvas }: { canvas: Canvas }) {
       canvas.on('selection:updated', (event: { selected: FabricObject[] }) => {
         handleObjectSelection(event.selected[0]);
       });
-      canvas.on('selection:cleared', (event: { deselected: FabricObject[] }) => {
+      canvas.on('selection:cleared', () => {
         handleObjectSelection(null);
         clearSettings();
       });
@@ -68,10 +68,13 @@ function Settings({ canvas }: { canvas: Canvas }) {
     const intValue = parseInt(value, 10);
 
     setWidth(intValue);
-    if(selectedObject && selectedObject.type === 'rect' && intValue >= 0) {
+    if (!selectedObject || intValue < 0) return;
+    if (selectedObject.type === 'rect') {
       selectedObject.set({ width: intValue / selectedObject.scaleX });
-      canvas.renderAll();
+    } else if (selectedObject.type === 'ellipse') {
+      selectedObject.set({ rx: intValue / selectedObject.scaleX });
     }
+    canvas?.renderAll();
   }
 
   const handleHeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,10 +82,13 @@ function Settings({ canvas }: { canvas: Canvas }) {
     const intValue = parseInt(value, 10);
 
     setHeight(intValue);
-    if(selectedObject && selectedObject.type === 'rect' && intValue >= 0) {
+    if (!selectedObject || intValue < 0) return;
+    if (selectedObject.type === 'rect') {
       selectedObject.set({ height: intValue / selectedObject.scaleY });
-      canvas.renderAll();
+    } else if (selectedObject.type === 'ellipse') {
+      selectedObject.set({ ry: intValue / selectedObject.scaleY });
     }
+    canvas?.renderAll();
   }
 
   const handleDiameterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,39 +111,44 @@ function Settings({ canvas }: { canvas: Canvas }) {
   }
 
   return (
-    <div>
-      {selectedObject && selectedObject.type === 'rect' && (
+    <div className="settings">
+      {!selectedObject ? (
+        <p className="text-sm text-muted-foreground">Select an object to edit</p>
+      ) : selectedObject.type === 'rect' ? (
         <div className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="width-input" className="block text-sm font-medium mb-1">Width</label>
+          <div className="space-y-2">
+            <label htmlFor="width-input-rect" className="block text-sm font-medium text-foreground">Width</label>
             <Input
-              id="width-input"
+              id="width-input-rect"
               type="number"
               value={width}
               onChange={handleWidthChange}
             />
           </div>
-          <div>
-            <label htmlFor="height-input" className="block text-sm font-medium mb-1">Height</label>
+          <div className="space-y-2">
+            <label htmlFor="height-input-rect" className="block text-sm font-medium text-foreground">Height</label>
             <Input
-              id="height-input"
+              id="height-input-rect"
               type="number"
               value={height}
               onChange={handleHeightChange}
             />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="color-input-rect" className="block text-sm font-medium text-foreground">Color</label>
             <Input
-              id="color-input"
+              id="color-input-rect"
               type="color"
               value={color}
               onChange={handleColorChange}
+              className="h-9 w-10 p-1 cursor-pointer"
             />
           </div>
         </div>
-      )}
-      {selectedObject && selectedObject.type === 'circle' && (
+      ) : selectedObject.type === 'circle' ? (
         <div className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="diameter-input" className="block text-sm font-medium mb-1">Diameter</label>
+          <div className="space-y-2">
+            <label htmlFor="diameter-input" className="block text-sm font-medium text-foreground">Diameter</label>
             <Input
               id="diameter-input"
               type="number"
@@ -145,48 +156,49 @@ function Settings({ canvas }: { canvas: Canvas }) {
               onChange={handleDiameterChange}
             />
           </div>
-          <div>
-            <label htmlFor="color-input" className="block text-sm font-medium mb-1">Color</label>
+          <div className="space-y-2">
+            <label htmlFor="color-input-circle" className="block text-sm font-medium text-foreground">Color</label>
             <Input
-              id="color-input"
+              id="color-input-circle"
               type="color"
               value={color}
               onChange={handleColorChange}
+              className="h-9 w-10 p-1 cursor-pointer"
             />
           </div>
         </div>
-      )}
-      {selectedObject && selectedObject.type === 'ellipse' && (
+      ) : selectedObject.type === 'ellipse' ? (
         <div className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="width-input" className="block text-sm font-medium mb-1">Width</label>
+          <div className="space-y-2">
+            <label htmlFor="width-input-ellipse" className="block text-sm font-medium text-foreground">Width</label>
             <Input
-              id="width-input"
+              id="width-input-ellipse"
               type="number"
               value={width}
               onChange={handleWidthChange}
             />
           </div>
-          <div>
-            <label htmlFor="height-input" className="block text-sm font-medium mb-1">Height</label>
+          <div className="space-y-2">
+            <label htmlFor="height-input-ellipse" className="block text-sm font-medium text-foreground">Height</label>
             <Input
-              id="height-input"
+              id="height-input-ellipse"
               type="number"
               value={height}
               onChange={handleHeightChange}
             />
           </div>
-          <div>
-            <label htmlFor="color-input" className="block text-sm font-medium mb-1">Color</label>
+          <div className="space-y-2">
+            <label htmlFor="color-input-ellipse" className="block text-sm font-medium text-foreground">Color</label>
             <Input
-              id="color-input"
+              id="color-input-ellipse"
               type="color"
               value={color}
               onChange={handleColorChange}
+              className="h-9 w-10 p-1 cursor-pointer"
             />
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
