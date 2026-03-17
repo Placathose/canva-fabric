@@ -35,7 +35,7 @@ function App() {
         top: 100,
         width: 100,
         height: 60,
-        fill: 'red',
+        fill: '#ED1C24',
       });
       canvas.add(rect);
     }
@@ -46,7 +46,7 @@ function App() {
         left: 150,
         top: 150,
         radius: 50,
-        fill: 'blue',
+        fill: '#2542BC',
       });
       canvas.add(circle);
     }
@@ -59,7 +59,7 @@ function App() {
         top: 250,
         rx: 50,
         ry: 30,
-        fill: 'green',
+        fill: '#4EA66E',
       });
       canvas.add(ellipse);
     }
@@ -79,7 +79,7 @@ function App() {
         </Button>
       </div>
       <canvas id="canvas" ref={canvasRef} />
-      <Settings canvas={canvas} />
+      {canvas && <Settings canvas={canvas} />}
     </div>
   )
 }
