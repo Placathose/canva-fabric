@@ -4,6 +4,7 @@ import './index.css'
 import { Button } from '@/components/ui/button'
 import { Circle as CircleIcon, Square as SquareIcon, Ellipse as EllipseIcon } from 'lucide-react'
 import Settings from './settings'
+import Video from './components/video'
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -77,6 +78,7 @@ function App() {
         <Button onClick={addEllipse} variant="ghost" size="icon" aria-label="Add Ellipse">
           <EllipseIcon />
         </Button>
+        {canvas && <Video canvas={canvas} />}
       </div>
       <canvas id="canvas" ref={canvasRef} />
       {canvas && <Settings canvas={canvas} />}
